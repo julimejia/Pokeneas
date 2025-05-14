@@ -2,26 +2,20 @@ version: '3.8'
 
 services:
   pokenea-app:
-    image: pokenea-express:latest  # Usa tu imagen local o reemplaza con tu registro
-    build: .  # Opcional: Para construir desde el Dockerfile
-    container_name: pokenea_express
+    image: julimejia2/pokenea-express:latest
     deploy:
-      replicas: 10 # Número de instancias (ajusta según necesidad)
+      replicas: 10
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
     environment:
       - NODE_ENV=production
-    env_file:
-      - .env  # Asegúrate de tener este archivo
     ports:
-      - "4005:4005"  # Mapeo de puertos (externo:interno)
-    volumes:
-      - ./src:/app/src  # Monta tu código fuente (opcional para desarrollo)
+      - "4005:4005"
     networks:
       - pokenea-net
 
 networks:
   pokenea-net:
-    driver: bridge
+    external: true
