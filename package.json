@@ -4,5 +4,12 @@
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "tailwindcss": "^4.1.6"
+  },
+    "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   }
 }
+
+
+

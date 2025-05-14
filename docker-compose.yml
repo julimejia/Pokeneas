@@ -1,17 +1,27 @@
 version: '3.8'
 
 services:
-  pokedex:
-    build: .
-    ports:
-      - "3000:3000"
+  pokenea-app:
+    image: pokenea-express:latest  # Usa tu imagen local o reemplaza con tu registro
+    build: .  # Opcional: Para construir desde el Dockerfile
+    container_name: pokenea_express
+    deploy:
+      replicas: 10 # Número de instancias (ajusta según necesidad)
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     environment:
       - NODE_ENV=production
-      - PORT=3000
-    restart: unless-stopped
+    env_file:
+      - .env  # Asegúrate de tener este archivo
+    ports:
+      - "4005:4005"  # Mapeo de puertos (externo:interno)
+    volumes:
+      - ./src:/app/src  # Monta tu código fuente (opcional para desarrollo)
     networks:
-      - pokedex-net
+      - pokenea-net
 
 networks:
-  pokedex-net:
+  pokenea-net:
     driver: bridge

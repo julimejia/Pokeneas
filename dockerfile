@@ -1,24 +1,18 @@
-# Etapa de construcción
-FROM node:18-alpine as builder
+FROM node:20-alpine
 
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-
-# Copia solo los archivos necesarios
-COPY src/ ./src/
-COPY *.js ./ 
-
-# Etapa de producción
-FROM node:18-alpine
-
+# Establece el directorio de trabajo primero
 WORKDIR /app
 
-# Copia desde el builder
-COPY --from=builder /app .
+# 1. Copia solo los archivos necesarios para npm install
+COPY package.json package-lock.json ./
 
-# Instala solo producción (opcional pero recomendado)
-RUN npm prune --production
+# 2. Limpia caché npm y reinstala
+RUN npm cache clean --force && \
+    rm -rf node_modules && \
+    npm install --production
 
-EXPOSE 3000
-CMD ["node", "src/index.js"]  # Asegúrate que apunte a tu archivo principal
+# 3. Copia el resto de archivos
+COPY . .
+
+# 4. Asegúrate de usar la ruta correcta a tu index.js
+CMD ["node", "src/index.js"]
