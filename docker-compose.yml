@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  pokedex:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - pokedex-net
+
+networks:
+  pokedex-net:
+    driver: bridge
